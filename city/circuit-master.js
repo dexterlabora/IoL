@@ -214,8 +214,10 @@
 
 // Receive the command from the server
 	process.on('message', function(msg){
-		var command = msg.command;
-	    console.log("command received: ", command);
+
+		if(msg.command){
+			 var command = msg.command || "";
+ 	     console.log("command received: ", command);
 	     // Check command received and execute actions
 	     if (command === "disco"){
 	        discoParty();
@@ -263,6 +265,7 @@
 	        crossingActivate();
 	        crossingDelayed();
 	     }
+	  } //end if(msg.command)
 	});
 
 

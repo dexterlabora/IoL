@@ -1,5 +1,6 @@
 // combo2.js
 	// This program uses multiple microcontrollers in the same app
+	// www.InternetOfLego.com
 
 
 // ~~~~ CIRCUIT ~~~~~~~

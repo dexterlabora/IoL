@@ -1,4 +1,4 @@
-// combo2.js
+// circuit-master.js
 	// This program uses multiple microcontrollers in the same app
 	// www.InternetOfLego.com
 

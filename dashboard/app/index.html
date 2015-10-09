@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Arduino connectivity test</title>
+
+    <!-- Bootstrap -->
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+        <h1>johnny-five test</h1>
+    <div class="row">
+      <div class="col-md-4">
+      <h4>Elevator Ultrasonic Distance Sensor</h4>
+      <textarea class="form-control" style="background:#222; color:#00ff00;" rows="8" id="evData"></textarea>
+      </div>
+      <div class="col-md-4">
+      <h4>General Data</h4>
+      <textarea class="form-control" style="background:#222; color:#00ff00;" rows="8" id="data"></textarea>
+      </div>
+      <div class="col-md-4">
+      <h4>Elevator</h4>
+        <div class="btn-group" data-toggle="buttons">
+            <label class="elevator_up btn btn-primary">
+              <input type="radio" name="elevator_up" id="ev1"> up
+            </label>
+            <label class="elevator_down btn btn-primary">
+              <input type="radio" name="elevator_down" id="ev2"> down
+            </label>
+            <label class="elevator_toggle btn btn-primary">
+              <input type="radio" name="elevator_toggle" id="ev3"> toggle
+            </label>
+            <label class="elevator_stop btn btn-primary">
+              <input type="radio" name="elevator_stop" id="ev4"> stop
+            </label>            
+        </div>
+      </div>
+      <div class="col-md-4">
+      <h4>LED Motor Pulse Delay (ms)</h4>
+      <p><input type="text" class="form-control" id="ledMotorDelay" name="ledMotorDelay" value="1000" /></p>
+      <p><button id="testLedMotor" class="btn btn-primary">Set Delay</button></p>
+      </div>
+      <div class="col-md-4">
+      <h4>LED Mega Pulse Delay (ms)</h4>
+      <p><input type="text" class="form-control" id="ledMegaDelay" name="ledMegaDelay" value="1000" /></p>
+      <p><button id="testLedMega" class="btn btn-primary">Set Delay</button></p>
+      </div>
+    </div>
+    </div>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="./jquery.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="./bootstrap.min.js"></script>
+    <script src="/primus/primus.js"></script>
+    <script>
+
+      var primus = Primus.connect();
+
+      primus.on("open", function () {
+          console.log("Connected!")
+      });
+
+      primus.on('elevatorProximity', function (data) {
+        console.log("elevator sensor data:",data);
+        $("#evData").append(data+"\r");
+        $("#evData").animate({scrollTop:$("#evData")[0].scrollHeight - $("#evData").height()},300);
+      });
+
+      
+      primus.on('news', function (data) {
+        console.log("Incoming general news:",data);
+        $("#data").append(data+"\r");
+        $("#data").animate({scrollTop:$("#data")[0].scrollHeight - $("#data").height()},300);
+      });
+
+      primus.on('data', function (data) {
+        console.log("Incoming general news:",data.news);
+        $("#data").append(data.news+"\r");
+        $("#data").animate({scrollTop:$("#data")[0].scrollHeight - $("#data").height()},300);
+      });
+      
+
+      $('.elevator_up').button();
+      $('.elevator_down').button();
+      $('.elevator_toggle').button();
+      $('.elevator_stop').button();
+
+      $('.elevator_up').on('change',function(){
+          console.log("socket emit: elevator_up");
+          primus.emit('elevator_up');
+      });
+      $('.elevator_down').on('change',function(){
+          console.log("socket emit: elevator_down");
+          primus.emit('elevator_down');
+      });
+      $('.elevator_toggle').on('change',function(){
+          console.log("socket emit: elevator_toggle");
+          primus.emit('elevator_toggle');
+      });
+      $('.elevator_stop').on('change',function(){
+          console.log("socket emit: elevator_stop");
+          primus.emit('elevator_stop');
+      });
+
+      $('#testLedMotor').on('click',function(){
+        var tmp = parseInt($('#ledMotorDelay').val(),10);
+        console.log("socket emit: Setting LED Motor Delay:",tmp)
+        primus.emit('testLedMotor',{delay:tmp});
+      });
+      $('#testLedMega').on('click',function(){
+        var tmp = parseInt($('#ledMegaDelay').val(),10);
+        console.log("socket emit: Setting LED Mega Delay:",tmp)
+        primus.emit('testLedMega',{delay:tmp});
+      });
+
+    </script>
+    </body>
+</html>

@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Nodebot</title>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+    <i class="fa fa-angle-up" id="elevator_up"></i>
+    <i class="fa fa-angle-down" id="elevator_down"></i>
+    <i class="fa stop" id="elevator_stop">STOP</i>
+    <i class="fa elevator-toggle" id="elevator_toggle">Toggle</i>
+    <textarea class="form-control" style="background:#222; color:#00ff00;" rows="4" id="evData"></textarea>
+</div>
+</body>
+<script src="/primus/primus.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script>
+// connect to current URL
+var primus = Primus.connect();
+
+primus.on("open", function () {
+    console.log("Connected!")
+});
+
+primus.on("data", function (data) {
+    console.log("data =", data)
+    
+    $("#evData").append(data.raw+"\r");
+    $("#evData").animate({scrollTop:$("#evData")[0].scrollHeight - $("#evData").height()},200);
+});
+
+
+
+function elevatorToggle(){
+	console.log("primus.write: elevator_toggle");
+	primus.write('elevator_toggle');
+}
+
+function elevatorUp(){
+    console.log("primus.write: elevator_up");
+    primus.write('elevator_up');
+}
+
+function elevatorDown(){
+    console.log("primus.write: elevator_down");
+    primus.write('elevator_down');
+}
+
+function elevatorStop(){
+    console.log("primus.write: elevator_stop");
+    primus.write('elevator_stop');
+}
+
+document.getElementById('elevator_toggle').onclick = elevatorToggle;
+document.getElementById('elevator_up').onclick = elevatorUp;
+document.getElementById('elevator_down').onclick = elevatorDown;
+document.getElementById('elevator_stop').onclick = elevatorStop;
+
+
+</script>
+</html>

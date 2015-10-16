@@ -46,7 +46,7 @@
             </label>
             <label class="elevator_stop btn btn-primary">
               <input type="radio" name="elevator_stop" id="ev4"> stop
-            </label>            
+            </label>
         </div>
       </div>
       <div class="col-md-4">
@@ -66,8 +66,44 @@
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="./bootstrap.min.js"></script>
     <script src="/primus/primus.js"></script>
-    <script>
 
+    <!-- PubNub cloud messaging service -->
+    <script src="http://cdn.pubnub.com/pubnub-3.7.15.min.js"></script>
+    <script>
+      function publish() {
+
+          pubnub = PUBNUB({
+              publish_key   : 'pub-c-da7f2ff7-6f33-4fdf-8713-7cf00975ccdd',
+              subscribe_key : 'sub-c-e7920ce4-6b9c-11e5-bcab-02ee2ddab7fe'
+          })
+
+          console.log("PubNub Subscribing..");
+          pubnub.subscribe({
+              channel : "iol",
+              message : function(message,env,ch,timer,magic_ch){
+                console.log(
+                "Message Received." + '<br>' +
+                "Channel: " + ch + '<br>' +
+                "Message: " + JSON.stringify(message)  + '<br>' +
+                "Raw Envelope: " + JSON.stringify(env) + '<br>' +
+                "Magic Channel: " + JSON.stringify(magic_ch)
+              )},
+              connect: pub
+          })
+
+          function pub() {
+             console.log("Since we’re publishing on subscribe connectEvent, we’re sure we’ll receive the following publish.");
+             pubnub.publish({
+                  channel : "iol",
+                  message : "Hello from PubNub web browser",
+                  callback: function(m){ console.log(m) }
+             })
+          }
+      };
+      </script>
+
+      <!-- websocket -->
+      <script>
       var primus = Primus.connect();
 
       primus.on("open", function () {
@@ -80,7 +116,7 @@
         $("#evData").animate({scrollTop:$("#evData")[0].scrollHeight - $("#evData").height()},300);
       });
 
-      
+
       primus.on('news', function (data) {
         console.log("Incoming general news:",data);
         $("#data").append(data+"\r");
@@ -92,7 +128,7 @@
         $("#data").append(data.news+"\r");
         $("#data").animate({scrollTop:$("#data")[0].scrollHeight - $("#data").height()},300);
       });
-      
+
 
       $('.elevator_up').button();
       $('.elevator_down').button();

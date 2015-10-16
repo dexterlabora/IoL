@@ -99,7 +99,7 @@
             </label>
             <label class="btn btn-primary">
               <a class="btn btn-large btn-success" id="evStop">Stop</a>
-            </label>     
+            </label>
         </div>
       </div>
 
@@ -111,14 +111,18 @@
             </label>
             <label class="btn btn-primary">
               <a class="btn btn-large btn-success" id="trackSwitchTurn">Turn</a>
-            </label>   
+            </label>
         </div>
       </div>
     </div>
     <div class="col-md-4">
-        <h4>IoL Data</h4>
+        <h4>WebSocket Data</h4>
         <textarea class="form-control" style="background:#222; color:#00ff00;" rows="4" id="data"></textarea>
-      </div>
+    </div>
+    <div class="col-md-4">
+        <h4>PubNub Data</h4>
+        <textarea class="form-control" style="background:#222; color:#00ff00;" rows="4" id="pnData"></textarea>
+    </div>
     <div id="light">
       <span class="active" id="red"></span>
       <span id="yellow"></span>
@@ -127,15 +131,42 @@
 
     <button>Switch Light</button>
 
-    
+
     <script src="./jquery.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="./bootstrap.min.js"></script>
     <script src="/primus/primus.js"></script>
+    <!-- PubNub cloud messaging service -->
+    <script src="http://cdn.pubnub.com/pubnub-3.7.15.min.js"></script>
+    <script type="text/javascript">
+      // Instantiate PubNub
+      var pubnub = PUBNUB.init({
+        publish_key   : 'pub-c-da7f2ff7-6f33-4fdf-8713-7cf00975ccdd',
+        subscribe_key : 'sub-c-e7920ce4-6b9c-11e5-bcab-02ee2ddab7fe'
+      });
+
+      // Subscribe to the demo_tutorial channel
+      pubnub.subscribe({
+          channel: 'iol',
+          message: function(m){
+            console.log(m);
+            $("#pnData").append(" PubNub Message -- "+JSON.stringify(m)+"\r");
+            $("#pnData").animate({scrollTop:$("#pnData")[0].scrollHeight - $("#pnData").height()},50);
+          }
+      });
+
+      // Publish a simple message to the demo_tutorial channel
+      pubnub.publish({
+          channel: 'iol',
+          message: {"news":"browser is connected"}
+      });
+
+    </script>
+
+
+
+
     <script>
-
-
-      
   // connect to current URL
   var primus = Primus.connect();
       console.log("socket:" + primus);
@@ -166,6 +197,8 @@
         $("#data").animate({scrollTop:$("#data")[0].scrollHeight - $("#data").height()},50);
       });
 
+
+
           /*
           $("#inData").css({'background':'red'});
           }else{
@@ -176,9 +209,9 @@
           $("#inData").animate({
             backgroundColor: "#aa0000"
           }, 1000 );
-          
 
-          setTimeout( 
+
+          setTimeout(
             $("#inData").animate({
               backgroundColor: "#ffffff"
               }, 1000 ),5000);
@@ -187,7 +220,7 @@
       });
 
 
-      
+
       $('#lightsOn').button();
       $('#LightsOn').on('click',function(){
         console.log('lights_on');
@@ -250,7 +283,7 @@
       $('button').on('click', function() {
           // Caching
           var self = $('.active');
-          
+
           // Check if another element exists after the currently active one otherwise
           // find the parent and start again
           if (self.next().length) {

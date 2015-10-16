@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Arduino connectivity test</title>
+
+    <!-- Bootstrap -->
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="./bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="./bootstrap-theme.min.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <style>
+    /*! Light */
+    #light {
+        background-color: #000;
+        box-shadow: 0 0 5px rgba(0,0,0, .8);
+        overflow: hidden;
+        padding: 0 0 4px;
+        width: 40px;
+    }
+
+    #light span {
+        border-radius: 50px;
+        display: block;
+        height: 30px;
+        margin: 4px auto 0;
+        opacity: .5;
+        width: 30px;
+    }
+
+    /*! Light colours */
+    #red    { background-color: red; }
+    #yellow { background-color: yellow; }
+    #green  { background-color: green; }
+
+    /*! Active states */
+    #light span.active    { opacity: 1; }
+    #light #red.active    { box-shadow: 0 0 10px red; }
+    #light #orange.active { box-shadow: 0 0 10px orange; }
+    #light #green.active  { box-shadow: 0 0 10px green; }
+
+    /*! Toggle button */
+    button {
+        margin-top: 10px;
+    }
+    </style>
+
+  </head>
+  <body>
+    <div class="container">
+    <h1>Internet of Legos</h1>
+    <div class="row">
+      <div class="col-md-4">
+        <h4>Train Crossing</h4>
+            <label class="citybtn btn btn-primary">
+              <a class="btn btn-large btn-success" id="trainCrossing">Train Crossing</a>
+            </label>
+        <h4>Track Crossing Sensor</h4>
+        <textarea class="form-control" style="background:#222; color:#00ff00;" rows="4" id="crData"></textarea>
+      </div>
+      <div class="col-md-4">
+        <h4>City Lights</h4>
+        <div class="btn-group" data-toggle="buttons">
+            <label class="btn btn-primary">
+              <a class="btn btn-large btn-success" id="lightsOn">On</a>
+            </label>
+            <label class="citybtn btn btn-primary">
+              <a class="btn btn-large btn-success" id="lightsOff">Off</a>
+            </label>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <h4>Elevator</h4>
+        <textarea class="form-control" style="background:#222; color:#00ff00;" rows="4" id="evData"></textarea>
+      </div>
+
+      <div class="col-md-4">
+        <h4>Elevator Controls</h4>
+        <div class="btn-group" data-toggle="buttons">
+            <label class="btn btn-primary">
+              <a class="btn btn-large btn-success" id="evUp">Up</a>
+            </label>
+            <label class="btn btn-primary">
+              <a class="btn btn-large btn-success" id="evDown">Down</a>
+            </label>
+            <label class="btn btn-primary">
+              <a class="btn btn-large btn-success" id="evToggle">Toggle</a>
+            </label>
+            <label class="btn btn-primary">
+              <a class="btn btn-large btn-success" id="evStop">Stop</a>
+            </label>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <h4>Track Switch</h4>
+        <div class="btn-group" data-toggle="buttons">
+            <label class="btn btn-primary">
+              <a class="btn btn-large btn-success" id="trackSwitchStraight">Straight</a>
+            </label>
+            <label class="btn btn-primary">
+              <a class="btn btn-large btn-success" id="trackSwitchTurn">Turn</a>
+            </label>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+        <h4>WebSocket Data</h4>
+        <textarea class="form-control" style="background:#222; color:#00ff00;" rows="4" id="data"></textarea>
+    </div>
+    <div class="col-md-4">
+        <h4>PubNub Data</h4>
+        <textarea class="form-control" style="background:#222; color:#00ff00;" rows="4" id="pnData"></textarea>
+    </div>
+    <div id="light">
+      <span class="active" id="red"></span>
+      <span id="yellow"></span>
+      <span id="green"></span>
+    </div>
+
+    <button>Switch Light</button>
+
+
+    <script src="./jquery.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="./bootstrap.min.js"></script>
+    <script src="/primus/primus.js"></script>
+    <!-- PubNub cloud messaging service -->
+    <script src="http://cdn.pubnub.com/pubnub-3.7.15.min.js"></script>
+    <script type="text/javascript">
+      // Instantiate PubNub
+      var pubnub = PUBNUB.init({
+        publish_key   : 'pub-c-da7f2ff7-6f33-4fdf-8713-7cf00975ccdd',
+        subscribe_key : 'sub-c-e7920ce4-6b9c-11e5-bcab-02ee2ddab7fe'
+      });
+
+      // Subscribe to the iol channel
+      pubnub.subscribe({
+          channel: 'iol',
+          message: function(m){
+            console.log(m);
+            $("#pnData").append(" PubNub Message -- "+JSON.stringify(m)+"\r");
+            $("#pnData").animate({scrollTop:$("#pnData")[0].scrollHeight - $("#pnData").height()},50);
+
+          }
+      });
+
+      // Publish a simple message to the iol channel
+      pubnub.publish({
+          channel: 'iol',
+          message: {"news":"browser is connected"}
+      });
+
+    </script>
+
+
+
+
+    <script>
+  // connect to current URL
+  var primus = Primus.connect();
+      console.log("socket:" + primus);
+
+      primus.on('news', function (msg) {
+        console.log("socket.on('news')", msg);
+        $("#data").append(msg+"\r");
+        $("#data").animate({scrollTop:$("#data")[0].scrollHeight - $("#data").height()},50);
+      });
+
+      // Crossing Sensor data
+      primus.on('crData', function (data) {
+        //console.log("socket.on('crData')",data);
+        $("#crData").append(data+"\r");
+        $("#crData").animate({scrollTop:$("#crData")[0].scrollHeight - $("#crData").height()},200);
+
+      // Elevator Sensor data
+      primus.on('evData', function (data) {
+        console.log("socket.on('evData')",data);
+        $("#evData").append(data+"\r");
+        $("#evData").animate({scrollTop:$("#evData")[0].scrollHeight - $("#evData").height()},50);
+      });
+
+      // Traffic Signal Data
+      primus.on('rawData', function (data) {
+        console.log("socket.on('data')", data);
+        $("#data").append(data+"\r");
+        $("#data").animate({scrollTop:$("#data")[0].scrollHeight - $("#data").height()},50);
+      });
+
+
+
+          /*
+          $("#inData").css({'background':'red'});
+          }else{
+          $("#inData").css({'background':'black'});
+          */
+
+          /*
+          $("#inData").animate({
+            backgroundColor: "#aa0000"
+          }, 1000 );
+
+
+          setTimeout(
+            $("#inData").animate({
+              backgroundColor: "#ffffff"
+              }, 1000 ),5000);
+          */
+
+      });
+
+
+
+      $('#lightsOn').button();
+      $('#lightsOn').on('click',function(){
+        console.log('lights_on');
+        //primus.send("command", "lights_on");
+        pubnub.publish({
+            channel: 'iol',
+            message: {"command":"lights_on"}
+        });
+      });
+      $('#lightsOff').button();
+      $('#lightsOff').on('click',function(){
+        console.log('lights_off');
+        //primus.send("command", "lights_off");
+        pubnub.publish({
+            channel: 'iol',
+            message: {"command":"lights_off"}
+        });
+      });
+      $('#evUp').button();
+      $('#evUp').on('click',function(){
+        console.log("elevator_up");
+        //primus.send("command", "elevator_up");
+        pubnub.publish({
+            channel: 'iol',
+            message: {"command":"elevator_up"}
+        });
+      });
+
+      $('#evDown').button();
+      $('#evDown').on('click',function(){
+        console.log("elevator_down");
+        //primus.send("command", "elevator_down");
+        pubnub.publish({
+            channel: 'iol',
+            message: {"command":"elevator_down"}
+        });
+      });
+
+      $('#evToggle').button();
+      $('#evToggle').on('click',function(){
+        console.log("elevator_toggle");
+        //primus.send("command", "elevator_toggle");
+        pubnub.publish({
+            channel: 'iol',
+            message: {"command":"elevator_toggle"}
+        });
+      });
+
+      $('#evStop').button();
+      $('#evStop').on('click',function(){
+        console.log("elevator_stop");
+        //primus.send("command", "elevator_stop");
+        pubnub.publish({
+            channel: 'iol',
+            message: {"command":"elevator_stop"}
+        });
+      });
+
+      $("#trackSwitchStraight").button();
+      $("#trackSwitchStraight").on('click',function(){
+        console.log("track_straight");
+        //primus.send("command","track_straight")
+        pubnub.publish({
+            channel: 'iol',
+            message: {"command":"track_straight"}
+        });
+      });
+
+      $("#trackSwitchTurn").button();
+      $("#trackSwitchTurn").on('click',function(){
+        console.log("track_turn");
+        //primus.send("command","track_turn")
+        pubnub.publish({
+            channel: 'iol',
+            message: {"command":"track_turn"}
+        });
+      });
+
+      $('#trainCrossing').button();
+      $('#trainCrossing').click(function(value){
+        console.log('train_crossing');
+        //primus.send("command","train_crossing");
+        pubnub.publish({
+            channel: 'iol',
+            message: {"command":"train_crossing"}
+        });
+      });
+
+
+
+      $('button').on('click', function() {
+          // Caching
+          var self = $('.active');
+
+          // Check if another element exists after the currently active one otherwise
+          // find the parent and start again
+          if (self.next().length) {
+              self
+                  .removeClass('active')
+                  .next()
+                  .addClass('active');
+          } else {
+              self
+                  .removeClass('active')
+                  .parent()
+                  .find('span:first')
+                  .addClass('active');
+          }
+      });
+
+
+      /* Example Stuff
+      $('.servobtn').button();
+      $('.servobtn').on('change',function(){
+          console.log("Setting Servo Pos:",$('input[name=servo]:checked').val())
+          primus.send('servo',{pos:$('input[name=servo]:checked').val()});
+      });
+
+      $('#ledSet').on('click',function(){
+        var tmp = parseInt($('#ledDelay').val(),10);
+        console.log("Setting LED Delay:",tmp)
+        primus.send('led',{delay:tmp});
+      });
+      */
+
+
+    </script>
+    </body>
+</html>

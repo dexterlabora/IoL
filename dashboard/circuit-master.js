@@ -8,6 +8,9 @@
 	var five = require('johnny-five');
 	var Raspi = require("raspi-io");
 
+	// Timing
+	var temporal = require("temporal");
+
 	// Lego IR lidr
 	var sys = require('sys');
 	var exec = require('child_process').exec;
@@ -28,10 +31,10 @@
 	// Linux access to infrared transmitter daemon lidr
 		// Code concept from: https://github.com/dspinellis/lego-power-scratch
 	function pfir(command){
-          exec('irsend SEND_ONCE LEGO_Single_Output ' + command, function(error, stdout, stderr){ 
+          exec('irsend SEND_ONCE LEGO_Single_Output ' + command, function(error, stdout, stderr){
         if(error)
           console.log("Error sending command: " + command);
-     //   else   
+     //   else
      //     console.log("Successfully sent command: " + command);
         });
 	}
@@ -49,27 +52,27 @@
 	    mega = this[0];
 	    motor = this[1];
 	    rpi = this[2];
-  
+
     // Devices
 
         // Disco Light
         var discoLed = new five.Led({
             pin: 28,
             board: mega
-        }); 
+        });
 
         // City Lights
         var cityLed = new five.Led({
             pin: 8,
             board: mega
-        }); 
+        });
 
         // test LED
         var led = new five.Led({
             pin: 13,
             board: mega
         });
-        
+
         // Track Switches
         var trackSwitchLedA = new five.Led({
             pin: 26,
@@ -95,12 +98,12 @@
             pin: 45,
             board: mega
         });
-        
+
         // Traffic Signal
         var trafficSignalLedRG = new five.Led({
             pin: 49,
             board: mega
-        }); 
+        });
 
         var trafficSignalLedY = new five.Led({
             pin: 50,
@@ -117,19 +120,19 @@
         var crossingLed1 = new five.Led({
             pin: 22,
             board: mega
-        }); 
+        });
         //crossing light 2
         var crossingLed2 = new five.Led({
             pin: 23,
             board: mega
-        }); 
+        });
         // crossing arm
         var crossingServo = new five.Servo({
             pin: 6,
             rate: 0.05,
             board: mega
-        }); 
-        var crossingSensor = new five.Sensor.Digital({ //crossing sensor 
+        });
+        var crossingSensor = new five.Sensor.Digital({ //crossing sensor
             pin: 53,
             freq: 150, // how often to read the sensor in milliseconds
             board: mega
@@ -140,18 +143,18 @@
         	pin: 'GPIO6',
         	board: rpi
         });
-        
+
         // Motion Sensor
         var motionSensor = new five.Sensor.Digital({
             pin: 52,
             board: mega
         });
-        
+
         var motionLed = new five.Led({
             pin: 42,
             board: mega
         });
-    
+
         // Elevator
             // Assign motorshield config to arduino board
         var configs = five.Motor.SHIELD_CONFIGS.ADAFRUIT_V1;
@@ -169,7 +172,7 @@
             freq: 50,
             board: motor
         });
-  
+
     // ***** REPL COMMAND LINE *****
     // Add devices to REPL (optional)
     this.repl.inject({
@@ -234,7 +237,7 @@
 	     }
 	     if (command === "track_turn"){
 	        trackSwitch("turn");
-	     }  
+	     }
 	     if (command === "pfir_1B_M5"){
 	        pfir_1B_M5();
 	     }
@@ -250,12 +253,12 @@
 	     if (command === "pfir_1R_forward"){
 	        pfir_1R_4();
 	     }
-	     if (command === "train_crossing"){   
-	        crossingActivate(); 
-	        crossingDelayed(); 
+	     if (command === "train_crossing"){
+	        crossingActivate();
+	        crossingDelayed();
 	     }
 	});
-    
+
 
     // DO INTERESTING STUFF HERE
 
@@ -263,11 +266,12 @@
         trackSwitchButton.on("down", function(){
             console.log("trackSwitchButton pressed");
             trackSwitch();
-        });    
+        });
 
-        // Disco 
+        // Disco
         function discoParty(){
-            console.log("Let's start the party!");
+            console.log("Disco Party!!");
+						process.send({"news":"Disco Party!"});
             discoLed.on();
             setTimeout(function(){
                 console.log("Party's over! you don't have to go home, but you can't stay here.")
@@ -278,12 +282,12 @@
         // Elevator
         var elevatorState = "stopped";
         var elevatorPosition;
-            //Smoothing algorithm variables to average proximity data in real-time 
+            //Smoothing algorithm variables to average proximity data in real-time
         var evNumReadings = 10;         // the number of readings per average
         var evReadings = [] ;           // the readings from the analog input
         var evReadIndex = 0;            // the index of the current reading
         var evTotal = 0;                // the running total
-        var evAverage = 0;              // the average  
+        var evAverage = 0;              // the average
         for (evThisReading = 0; evThisReading < evNumReadings; evThisReading++) {
             evReadings[evThisReading] = 0;  // initialize data
         }
@@ -295,8 +299,8 @@
 
 
         elevatorProximity.on("data", function() {
-            //console.log(this.cm + "cm" + " avg " + evAverage + " state = " + elevatorState + ": position = " + elevatorPosition); 
-            
+            //console.log(this.cm + "cm" + " avg " + evAverage + " state = " + elevatorState + ": position = " + elevatorPosition);
+
             //process.send("message",{"evData": this.cm});
 
             // Smoothing sensor data
@@ -330,7 +334,7 @@
                     elevatorPosition = "top";
                 }else{
                     elevatorPosition = "middle";
-                }   
+                }
             }
         });
 
@@ -370,10 +374,10 @@
         }
 
         // Turn on Disco Lights
-        discoLed.on();
+        // discoLed.on();
 
         // Turn on Testing LED
-        //led.blink();
+        // led.blink();
 
         // Turn on City Lights
         cityLed.on();
@@ -385,32 +389,59 @@
             console.log("IR Sensor triggered");
             console.log("CityStation is active? ",stationActive);
 
-            // If train is not already detected, begin routine. 
+            // If train is not already detected, begin routine.
             if (stationActive == false){
                 console.log("Train has arrived and stopping");
                 stationActive = true;
-                
-                // Stop Red Train (delay to align passenger coach)
-                setTimeout(function(){
-                	console.log("Stopping at station and align coach");
-                    pfir_1R_brake();
-                }, 300);
-                
-                // After 5 seconds start train
-                setTimeout(function(){
-                    console.log("Moving forward");
-                    train_1R_forward();
-                }, 5000);
+								process.send({'cityStation':"Train has arrived"});
 
-                // Resume sensor data after 10 seconds.
-                setTimeout(function(){
-                    console.log("Train has cleared station");
-                    stationActive = false;
-                    console.log("CityStation is active? ",stationActive);
-                }, 10000);
-            }   
-
-
+                // Stop Red Train
+								temporal.queue([
+								  {
+										delay: 300,
+								    task: function(){
+											console.log("Slowing train");
+											pfir_1R_3();
+										}
+								  },
+								  {
+								    delay: 300,
+								    task: function(){
+											console.log("Slowing train");
+											pfir_1R_2();
+										}
+								  },
+									{
+										delay: 300,
+										task: function(){
+											console.log("Slowing train");
+											pfir_1R_1();
+										}
+									},
+									{
+										delay: 100, //(delay to align passenger coach)
+										task: function(){
+											console.log("Train stopping");
+											pfir_1R_brake();
+										}
+									},
+									{
+										delay: 5000,
+										task: function(){
+											console.log("Moving forward");
+											pfir_1R_4();
+										}
+									},
+									{
+										delay: 5000,
+										task: function(){
+											console.log("Train has cleared station");
+	                    stationActive = false;
+	                    console.log("CityStation is active? ",stationActive);
+										}
+									}
+								]);
+            }
         });
 
         // Track Switch with Lights
@@ -456,20 +487,20 @@
                     trafficSignalLedY.off();
                     trafficSignalLedGR.off();
                     trafficSignalState = 1;
-                    setTimeout(trafficSignal,6000); 
+                    setTimeout(trafficSignal,6000);
                 } else if (trafficSignalState == 1){ // yellow
                     //console.log("traffic crossing Y");
                     trafficSignalLedRG.off();
                     trafficSignalLedY.on();
                     trafficSignalLedGR.off();
                     trafficSignalState = 2;
-                    setTimeout(trafficSignal,2000); 
+                    setTimeout(trafficSignal,2000);
                 } else if (trafficSignalState == 2){ // green
                     //console.log("traffic crossing GR");
                     trafficSignalLedRG.off();
                     trafficSignalLedY.off();
                     trafficSignalLedGR.on();
-                    trafficSignalState = 3; 
+                    trafficSignalState = 3;
                     setTimeout(trafficSignal,6000);
                 } else if (trafficSignalState == 3){ // yellow
                     //console.log("traffic crossing Y");
@@ -477,7 +508,7 @@
                     trafficSignalLedY.on();
                     trafficSignalLedGR.off();
                     trafficSignalState = 0;
-                    setTimeout(trafficSignal,2000); 
+                    setTimeout(trafficSignal,2000);
                 }
         }
         trafficSignal();
@@ -488,12 +519,12 @@
 
     // Train Crossing Sensor
     crossingSensor.on("change", function() {
-        console.log('crossingSensor raw: ' + this.value );      
+        console.log('crossingSensor raw: ' + this.value );
          if (this.value == 0){   // Inverted sensor, where 0 equals detection
             if (!crossingActive){ // Detect if the crossing is already active
-               crossingActivate(); // Activate Crossing 
+               crossingActivate(); // Activate Crossing
             }else{
-               crossingDelayed(); // Delay Deactivation 
+               crossingDelayed(); // Delay Deactivation
             }
         }
     });
@@ -529,7 +560,7 @@
     function crossingDelayed(){
         console.log("crossingDelayed()");
         clearTimeout(crossingDelay); // Reset delay timer (or the crossing goes crazy!)
-        crossingDelay = setTimeout(function(){    
+        crossingDelay = setTimeout(function(){
             crossingDeactivate(); // Deactivate crossing after delay time
         },3000);    // Delay time in milliseconds
     }
@@ -544,15 +575,15 @@
 
           // Wake up these
           cityLed.on();
-          discoLed.on();
+          // discoLed.on();
           clearTimeout(sleepMode);
-          console.log("sleep timer reset");          
+          console.log("sleep timer reset");
           sleepMode = setTimeout(function() {
               console.log("going to sleep");
 
               // sleep these
-              cityLed.off();  
-              discoLed.off();
+              cityLed.off();
+              //discoLed.off();
             }, 1000*60*5);
         });
 
@@ -567,10 +598,30 @@
               pfir("1B_BRAKE");
           }
 
-          function pfir_1R_4(){
-              console.log("pfir_1R_4");
+					function pfir_1R_5(){
+              console.log("pfir_1R_5");
               pfir("1R_5");
           }
+
+          function pfir_1R_4(){
+              console.log("pfir_1R_4");
+              pfir("1R_4");
+          }
+
+					function pfir_1R_3(){
+							console.log("pfir_1R_3");
+							pfir("1R_3");
+					}
+
+					function pfir_1R_2(){
+							console.log("pfir_1R_2");
+							pfir("1R_2");
+					}
+
+					function pfir_1R_1(){
+							console.log("pfir_1R_1");
+							pfir("1R_1");
+					}
 
           function pfir_1R_brake(){
               console.log("pfir_1R_brake");
@@ -581,5 +632,3 @@
           }
 
 	}); // END new five.Boards(ports).on("ready", function(){
-
-

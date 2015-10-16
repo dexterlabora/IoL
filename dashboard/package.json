@@ -18,6 +18,7 @@
     "primus": "^3.2.2",
     "primus-emitter": "^3.1.1",
     "pubnub": "^3.7.14",
-    "raspi-io": "^4.0.0"
+    "raspi-io": "^4.0.0",
+    "temporal": "^0.4.1"
   }
 }

@@ -6,6 +6,7 @@
 	var express = require('express');
 	var http = require('http');
 	var path = require('path');
+	// The config file will be used to store API details. Its separate for security reasons.
 	var config = require('./config');
 	var pubnub = require("pubnub")({
 			ssl           : true,  // <- enable TLS Tunneling over TCP

@@ -25,7 +25,7 @@
 	app.use(express.static(path.join(__dirname,"public")));
 	//Serving the static HTML file
 	app.get('/', function (res) {
-	    res.sendFile('/index.html')
+	    res.sendFile('/index-pn.html')
 	});
 
 // Define API

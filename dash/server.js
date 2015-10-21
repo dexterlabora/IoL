@@ -5,7 +5,13 @@
 	var express = require('express');
 	var http = require('http');
 	var path = require('path');
-
+	// The config file will be used to store API details. Its separate for security reasons.
+	var config = require('./config');
+	var pubnub = require("pubnub")({
+			ssl           : true,  // <- enable TLS Tunneling over TCP
+			publish_key   : config.pubnub.publish_key,
+			subscribe_key : config.pubnub.subscribe_key
+	});
 //Setting the path to static assets
 	var app = express();
 	app.use(express.static(path.join(__dirname,"public")));

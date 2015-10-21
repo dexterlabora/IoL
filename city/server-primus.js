@@ -1,6 +1,7 @@
-// server.js
+// server-primus.js
+// This Server provides a REST API and supports Websockets for real-time control and status
 
-// Dependencies 
+// Dependencies
 	var Primus = require('primus');
 	var PrimusEmitter = require('primus-emitter');
 	var express = require('express');
@@ -56,7 +57,7 @@
 	primus.on('connection', function(spark){
 		console.log("websocket client connected",spark.id);
 			// Send to websocket client
-			spark.send('news', 'Howdy! You are connected to the IoL'); 
+			spark.send('news', 'Howdy! You are connected to the IoL');
 
 	    // If WebSockets server receives a ‘command’ event, it will process it
 	    spark.on("command", function(command){
@@ -84,4 +85,3 @@
 
 // Turn on sever
 	server.listen(8080);
-

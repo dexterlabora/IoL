@@ -13,7 +13,13 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
 
     <!-- JQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+
+    <!--
+    <script src="./jquery.js"></script>
+    -->
 
     <!-- PubNub cloud messaging service -->
     <script src="http://cdn.pubnub.com/pubnub-3.7.15.min.js"></script>
@@ -62,6 +68,7 @@
     </style>
 
   </head>
+
   <body>
     <div class="container">
     <h1>IoL Dashboard</h1>
@@ -205,9 +212,8 @@
       // Publish a simple message to the iol channel
       pubnub.publish({
           channel: 'iol',
-          message: {"news":"remote browser is connected"}
+          message: {"news":"Dashboard is connected"}
       });
-
     </script>
 
 
@@ -325,8 +331,6 @@
             message: {"command":"train_crossing"}
         });
       });
-
-
 
     </script>
     </body>

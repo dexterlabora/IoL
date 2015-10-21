@@ -1,0 +1,26 @@
+{
+  "name": "dash",
+  "version": "0.0.0",
+  "description": "IoL Dashboard",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dexterlabora/IoL"
+  },
+  "author": "Cory Guynn",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dexterlabora/IoL/issues"
+  },
+  "homepage": "https://github.com/dexterlabora/IoL",
+  "dependencies": {
+    "http": "0.0.0",
+    "pubnub": "^3.7.15",
+    "path": "^0.12.7",
+    "express": "^4.13.3"
+  }
+}

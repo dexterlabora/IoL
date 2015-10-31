@@ -1,0 +1,23 @@
+{
+  "name": "weather",
+  "version": "0.0.0",
+  "description": "Weather Station",
+  "main": "server-pubnub.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Cory Guynn",
+  "license": "ISC",
+  "dependencies": {
+    "temporal": "^0.4.1",
+    "johnny-five": "^0.9.1",
+    "http": "0.0.0",
+    "primus-emitter": "^3.1.1",
+    "path": "^0.12.7",
+    "pubnub": "^3.7.15",
+    "express": "^4.13.3",
+    "primus": "^4.0.1",
+    "wp": "0.0.3",
+    "websockets": "^0.2.0"
+  }
+}

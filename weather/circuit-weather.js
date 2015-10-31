@@ -11,7 +11,15 @@ var temporal = require("temporal");
 		console.log("circuit received message from server: ", message);
 	});
 
-board.on('ready', function(){
+  // Define Johnny-Five Boards
+	var ports = [
+	  { id: "nano", port: "/dev/ttyUSB1" }
+	];
+
+	var board = new five.Boards(ports).on("ready", function(){
+	    nano = this[0];
+
+
     console.log('five ready');
 
     // Devices

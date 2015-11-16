@@ -19,6 +19,7 @@
     "primus-emitter": "^3.1.1",
     "pubnub": "^3.7.14",
     "raspi-io": "^4.0.0",
+    "socketcluster-client": "^2.4.1",
     "temporal": "^0.4.1"
   }
 }

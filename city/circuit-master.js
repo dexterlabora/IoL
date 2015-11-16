@@ -146,7 +146,7 @@
 
         // Motion Sensor
         var motionSensor = new five.Sensor.Digital({
-            pin: 52,
+            pin: 32,
             board: mega
         });
 
@@ -568,6 +568,7 @@
         // Sleep Mode Logic
         var sleepMode;
         motionSensor.on('change', function(){
+					process.send({'motionSensor':true});
           motionLed.on();
           setTimeout(function(){
               motionLed.off();

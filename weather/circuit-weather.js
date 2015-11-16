@@ -1,7 +1,6 @@
 // circuit-weather.js
 
 var five = require("johnny-five");
-var board = new five.Board();
 var temporal = require("temporal");
 //var patterns =require("./matrixpatterns.js");
 
@@ -11,7 +10,7 @@ var temporal = require("temporal");
 		console.log("circuit received message from server: ", message);
 	});
 
-  // Define Johnny-Five Boards
+// Define Johnny-Five Boards
 	var ports = [
 	  { id: "nano", port: "/dev/ttyUSB1" }
 	];
@@ -23,14 +22,18 @@ var temporal = require("temporal");
     console.log('five ready');
 
     // Devices
-    var led = new five.Led(13);
+    var led = new five.Led({
+	pin: 13,
+	board: nano
+    });
 
     var matrix = new five.Led.Matrix({
     pins: {
         data: 12,
         clock: 10,
         cs: 11
-      }
+      },
+	board: nano
     });
 
     // Runtime Access
@@ -43,14 +46,19 @@ var temporal = require("temporal");
 
     // Logic
 
-    process.on("message", function(message){
+		process.on("message", function(msg){
+
 
       // Weather Underground API data
-      if(message.weather.tempc){
-        console.log("weather temperature celcius: " + message.weather.tempc);
+
+      if( typeof msg.weather !== 'undefined'){
+				var weather = msg.weather;
+        console.log("weather temperature celcius: " + weather.tempc);
         matrix.brightness(10);
-        matrix.draw(message.weather.tempc);
+        matrix.draw(weather.tempc);
       }
+
+
     }); // end process.on()
 
 

@@ -10,8 +10,8 @@
 	var config = require('./config');
 	var pubnub = require("pubnub")({
 			ssl           : true,  // <- enable TLS Tunneling over TCP
-			publish_key   : config.pubnub_publish_key,
-			subscribe_key : config.pubnub_subscribe_key
+			publish_key   : config.pubnub.publish_key,
+			subscribe_key : config.pubnub.subscribe_key
 	});
 
 	// used for debugging purposes
@@ -110,7 +110,8 @@
 	});
 
 	circuit.on('message', function(msg) {
-		console.log("circuit.on message and sending to pubnub channel: "+msg);
+		console.log("circuit.on(message) publish to pubnub channel - iol: ");
+		console.log(util.inspect(msg, false, null));
 		pubnub.publish({
 		    channel   : 'iol',
 		    message   : msg,

@@ -14,11 +14,13 @@
     "express": "^4.13.3",
     "http": "0.0.0",
     "johnny-five": "^0.8.91",
+    "meshblu": "^1.31.2",
     "path": "^0.11.14",
     "primus": "^3.2.2",
     "primus-emitter": "^3.1.1",
     "pubnub": "^3.7.14",
     "raspi-io": "^4.0.0",
+    "request": "^2.67.0",
     "socketcluster-client": "^2.4.1",
     "temporal": "^0.4.1"
   }

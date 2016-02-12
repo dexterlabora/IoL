@@ -10,8 +10,8 @@
 	var config = require('./config');
 	var pubnub = require("pubnub")({
 			ssl           : true,  // <- enable TLS Tunneling over TCP
-			publish_key   : config.pubnub.publish_key,
-			subscribe_key : config.pubnub.subscribe_key
+			publish_key   : config.pubnub_publish_key,
+			subscribe_key : config.pubnub_subscribe_key
 	});
 
 	// used for debugging purposes
@@ -110,8 +110,7 @@
 	});
 
 	circuit.on('message', function(msg) {
-		console.log("circuit.on(message) publish to pubnub channel - iol: ");
-		console.log(util.inspect(msg, false, null));
+		console.log("circuit.on message and sending to pubnub channel: "+msg);
 		pubnub.publish({
 		    channel   : 'iol',
 		    message   : msg,
@@ -125,7 +124,57 @@
 	pubnub.subscribe({
 			channel  : "iol",
 			callback : function(message) {
-					console.log( "Server: PubNub Received message and sending to ciruit: ", message );
+					console.log( "Server: PubNub Received message and sending to ciruit: ");
+					console.log(util.inspect(message, false, null));
 					circuit.send(message);
 			}
 	});
+
+
+
+
+/* ---------------------------------------------------------------------------
+socketCluster Integration
+--------------------------------------------------------------------------- */
+
+sc = require("socketcluster-client");
+
+var scOptions = {
+    hostname: 'ec2-52-18-144-140.eu-west-1.compute.amazonaws.com', //change this to socketCluster server
+    port: 8000,
+};
+
+// Initiate the socketCluster connection to the server
+var socket = sc.connect(scOptions);
+socket.on('connect', function () {
+    console.log('socketCluster CONNECTED');
+
+		// Send event 'news' to socketCluster clients
+		socket.emit('news', {
+			id: 'IoL City',
+			message: 'socketCluster CONNECTED'
+		});
+
+});
+
+// Listen to an event called 'news' and send to circuit
+socket.on('news', function (msg) {
+    console.log('news: ');
+    console.log(util.inspect(msg, false, null));
+});
+
+// Listen to an event called 'command' and send to circuit
+socket.on('command', function (msg){
+	console.log( "Server: socketCluster received message and sending to ciruit: ");
+	console.log(util.inspect(msg, false, null));
+	circuit.send(msg);
+});
+
+circuit.on('message', function(msg) {
+	console.log('sending circuit message to socketCluster: ');
+	console.log(util.inspect(msg, false, null));
+	socket.emit('data', {
+		id: 'IoL City',
+		message: msg
+	});
+});

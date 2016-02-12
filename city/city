@@ -1,0 +1,127 @@
+
+events.js:72
+        throw er; // Unhandled 'error' event
+              ^
+Error: Serialport not open.
+    at SerialPortFactory.SerialPort.write (/root/github-projects/IoL/city/node_modules/johnny-five/node_modules/serialport/serialport.js:288:17)
+    at Board.analogWrite (/root/github-projects/IoL/city/node_modules/johnny-five/node_modules/firmata/lib/firmata.js:643:18)
+    at Board.servoWrite (/root/github-projects/IoL/city/node_modules/johnny-five/node_modules/firmata/lib/firmata.js:690:20)
+    at Servo.Controllers.Standard.servoWrite.value (/root/github-projects/IoL/city/node_modules/johnny-five/lib/servo.js:108:17)
+    at Servo.to (/root/github-projects/IoL/city/node_modules/johnny-five/lib/servo.js:315:12)
+    at trackSwitch (/root/github-projects/IoL/city/circuit-master.js:452:32)
+    at process.<anonymous> (/root/github-projects/IoL/city/circuit-master.js:242:10)
+    at process.emit (events.js:117:20)
+    at handleMessage (child_process.js:322:10)
+    at Pipe.channel.onread (child_process.js:349:11)
+Error: channel closed
+    at ChildProcess.target.send (child_process.js:406:26)
+    at Array.pubnub.subscribe.callback [as 0] (/root/github-projects/IoL/city/server-pubnub.js:129:14)
+    at Object.<anonymous> (/root/github-projects/IoL/city/node_modules/pubnub/node.js/pubnub.js:1530:47)
+    at each (/root/github-projects/IoL/city/node_modules/pubnub/node.js/pubnub.js:148:15)
+    at _connect.xdr.success (/root/github-projects/IoL/city/node_modules/pubnub/node.js/pubnub.js:1526:25)
+    at finished (/root/github-projects/IoL/city/node_modules/pubnub/node.js/pubnub.js:2181:13)
+    at IncomingMessage.<anonymous> (/root/github-projects/IoL/city/node_modules/pubnub/node.js/pubnub.js:2255:17)
+    at IncomingMessage.emit (events.js:117:20)
+    at _stream_readable.js:944:16
+    at process._tickDomainCallback (node.js:492:13)
+
+events.js:72
+        throw er; // Unhandled 'error' event
+              ^
+Error: Cannot open /dev/ttyUSB0
+Error: channel closed
+    at ChildProcess.target.send (child_process.js:406:26)
+    at Array.pubnub.subscribe.callback [as 0] (/root/github-projects/IoL/city/server-pubnub.js:129:14)
+    at Object.<anonymous> (/root/github-projects/IoL/city/node_modules/pubnub/node.js/pubnub.js:1530:47)
+    at each (/root/github-projects/IoL/city/node_modules/pubnub/node.js/pubnub.js:148:15)
+    at _connect.xdr.success (/root/github-projects/IoL/city/node_modules/pubnub/node.js/pubnub.js:1526:25)
+    at finished (/root/github-projects/IoL/city/node_modules/pubnub/node.js/pubnub.js:2181:13)
+    at IncomingMessage.<anonymous> (/root/github-projects/IoL/city/node_modules/pubnub/node.js/pubnub.js:2255:17)
+    at IncomingMessage.emit (events.js:117:20)
+    at _stream_readable.js:944:16
+    at process._tickDomainCallback (node.js:492:13)
+
+events.js:72
+        throw er; // Unhandled 'error' event
+              ^
+Error: Cannot open /dev/ttyUSB0
+Error: channel closed
+    at ChildProcess.target.send (child_process.js:406:26)
+    at Array.pubnub.subscribe.callback [as 0] (/root/github-projects/IoL/city/server-pubnub.js:129:14)
+    at Object.<anonymous> (/root/github-projects/IoL/city/node_modules/pubnub/node.js/pubnub.js:1530:47)
+    at each (/root/github-projects/IoL/city/node_modules/pubnub/node.js/pubnub.js:148:15)
+    at _connect.xdr.success (/root/github-projects/IoL/city/node_modules/pubnub/node.js/pubnub.js:1526:25)
+    at finished (/root/github-projects/IoL/city/node_modules/pubnub/node.js/pubnub.js:2181:13)
+    at IncomingMessage.<anonymous> (/root/github-projects/IoL/city/node_modules/pubnub/node.js/pubnub.js:2255:17)
+    at IncomingMessage.emit (events.js:117:20)
+    at _stream_readable.js:944:16
+    at process._tickDomainCallback (node.js:492:13)
+
+events.js:72
+        throw er; // Unhandled 'error' event
+              ^
+Error: Cannot open /dev/ttyUSB0
+Error: channel closed
+    at ChildProcess.target.send (child_process.js:406:26)
+    at Array.pubnub.subscribe.callback [as 0] (/root/github-projects/IoL/city/server-pubnub.js:129:14)
+    at Object.<anonymous> (/root/github-projects/IoL/city/node_modules/pubnub/node.js/pubnub.js:1530:47)
+    at each (/root/github-projects/IoL/city/node_modules/pubnub/node.js/pubnub.js:148:15)
+    at _connect.xdr.success (/root/github-projects/IoL/city/node_modules/pubnub/node.js/pubnub.js:1526:25)
+    at finished (/root/github-projects/IoL/city/node_modules/pubnub/node.js/pubnub.js:2181:13)
+    at IncomingMessage.<anonymous> (/root/github-projects/IoL/city/node_modules/pubnub/node.js/pubnub.js:2255:17)
+    at IncomingMessage.emit (events.js:117:20)
+    at _stream_readable.js:944:16
+    at process._tickDomainCallback (node.js:492:13)
+
+events.js:72
+        throw er; // Unhandled 'error' event
+              ^
+Error: Cannot open /dev/ttyUSB0
+Error: channel closed
+    at ChildProcess.target.send (child_process.js:406:26)
+    at Array.pubnub.subscribe.callback [as 0] (/root/github-projects/IoL/city/server-pubnub.js:129:14)
+    at Object.<anonymous> (/root/github-projects/IoL/city/node_modules/pubnub/node.js/pubnub.js:1530:47)
+    at each (/root/github-projects/IoL/city/node_modules/pubnub/node.js/pubnub.js:148:15)
+    at _connect.xdr.success (/root/github-projects/IoL/city/node_modules/pubnub/node.js/pubnub.js:1526:25)
+    at finished (/root/github-projects/IoL/city/node_modules/pubnub/node.js/pubnub.js:2181:13)
+    at IncomingMessage.<anonymous> (/root/github-projects/IoL/city/node_modules/pubnub/node.js/pubnub.js:2255:17)
+    at IncomingMessage.emit (events.js:117:20)
+    at _stream_readable.js:944:16
+    at process._tickDomainCallback (node.js:492:13)
+
+events.js:72
+        throw er; // Unhandled 'error' event
+              ^
+Error: Cannot open /dev/ttyUSB0
+Error: channel closed
+    at ChildProcess.target.send (child_process.js:406:26)
+    at Array.pubnub.subscribe.callback [as 0] (/root/github-projects/IoL/city/server-pubnub.js:129:14)
+    at String.<anonymous> (/root/github-projects/IoL/city/node_modules/pubnub/node.js/pubnub.js:1530:47)
+    at each (/root/github-projects/IoL/city/node_modules/pubnub/node.js/pubnub.js:148:15)
+    at _connect.xdr.success (/root/github-projects/IoL/city/node_modules/pubnub/node.js/pubnub.js:1526:25)
+    at finished (/root/github-projects/IoL/city/node_modules/pubnub/node.js/pubnub.js:2181:13)
+    at IncomingMessage.<anonymous> (/root/github-projects/IoL/city/node_modules/pubnub/node.js/pubnub.js:2255:17)
+    at IncomingMessage.emit (events.js:117:20)
+    at _stream_readable.js:944:16
+    at process._tickDomainCallback (node.js:492:13)
+
+events.js:72
+        throw er; // Unhandled 'error' event
+              ^
+Error: Cannot open /dev/ttyUSB0
+Error: channel closed
+    at ChildProcess.target.send (child_process.js:406:26)
+    at Array.pubnub.subscribe.callback [as 0] (/root/github-projects/IoL/city/server-pubnub.js:129:14)
+    at Object.<anonymous> (/root/github-projects/IoL/city/node_modules/pubnub/node.js/pubnub.js:1530:47)
+    at each (/root/github-projects/IoL/city/node_modules/pubnub/node.js/pubnub.js:148:15)
+    at _connect.xdr.success (/root/github-projects/IoL/city/node_modules/pubnub/node.js/pubnub.js:1526:25)
+    at finished (/root/github-projects/IoL/city/node_modules/pubnub/node.js/pubnub.js:2181:13)
+    at IncomingMessage.<anonymous> (/root/github-projects/IoL/city/node_modules/pubnub/node.js/pubnub.js:2255:17)
+    at IncomingMessage.emit (events.js:117:20)
+    at _stream_readable.js:944:16
+    at process._tickDomainCallback (node.js:492:13)
+
+events.js:72
+        throw er; // Unhandled 'error' event
+              ^
+Error: Cannot open /dev/ttyUSB0

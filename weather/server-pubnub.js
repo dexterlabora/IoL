@@ -121,8 +121,9 @@
 	Listen for PubNub Messages
 	--------------------------------------------------------------------------- */
 
+
 	pubnub.subscribe({
-			channel  : "iol",
+			channel  : "weather", //<-- likely set this to weather
 			callback : function(message) {
 					console.log( "Server: PubNub Received message and sending to ciruit: ", message );
 					circuit.send(message);
